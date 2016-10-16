@@ -1,6 +1,7 @@
 import Html exposing (Html, div, h1, section, text)
 import Html.App as App
 import Html.Attributes exposing (class, id)
+import Firmname
 
 main = App.beginnerProgram {
     model = model, 
@@ -9,28 +10,35 @@ main = App.beginnerProgram {
   }
 
 
-type alias Model = 
-  { ship : Int, debt : Int, bank : Int, cash : Int }
+type alias AppModel = 
+  {
+    firmname : Firmname.Model
+  }
 
-model : Model
-model = { ship = 0, debt = 0, bank = 0, cash = 0 }
+model : AppModel
+model = { 
+    firmname = Firmname.model
+  }
 
 
-type Msg = Char String | Noop
+type Msg = 
+  FirmnameMsg Firmname.Msg
 
-update : Msg -> Model -> Model
+update : Msg -> AppModel -> AppModel
 update msg model = 
   case msg of
-    Noop   -> model 
-    Char s -> model  -- do something later
+    FirmnameMsg s -> { model | firmname = Firmname.update s model.firmname }
 
-view : Model -> Html Msg
+
+view : AppModel -> Html Msg
 view model = 
   div 
     [class "wrapper", id "maincontainer"]
     [
       h1 [] [text "Taipan"],
-      section [class "mainsection"] [text "Imagine your ad here"]
+      section [class "mainsection"] [
+        App.map FirmnameMsg (Firmname.view model.firmname)
+      ]
     ]
   
 

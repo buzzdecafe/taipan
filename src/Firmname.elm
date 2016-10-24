@@ -16,7 +16,8 @@ model = Model ""
 
 -- UPDATE
 
-type Msg = Change String
+type Msg 
+  = Change String
 
 update : Msg -> Model -> Model
 update msg model =
